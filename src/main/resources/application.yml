@@ -1,0 +1,7 @@
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434/
+
+server:
+  port: 9292
