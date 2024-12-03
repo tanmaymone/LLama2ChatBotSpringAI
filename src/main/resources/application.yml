@@ -1,7 +1,18 @@
 spring:
+  application:
+    name: Spring_AI_RAG_DEMO
   ai:
     ollama:
       base-url: http://localhost:11434/
-
+      chat:
+        model: phi3
+      embedding:
+        enabled: true
+        model: mxbai-embed-large
 server:
   port: 9292
+sfg:
+  aiapp:
+    vectorStorePath: C:\CSIT\ALPHA\Local\spring-ai-llama2\vectorstore.json
+    documentsToLoad:
+      - classpath:/DemoForRAGPDF.pdf

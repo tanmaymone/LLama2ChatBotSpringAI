@@ -35,8 +35,9 @@
     <button id="send-btn">Send</button>
 
     <script>
-    const apiUrl = "http://192.168.29.184:9292/api/v1/generate";
-
+    
+    const apiUrl = "http://localhost:9292/api/v1/generate";
+	
     document.getElementById('send-btn').addEventListener('click', async () => {
         const message = document.getElementById('chat-input').value;
         if (!message) return;
