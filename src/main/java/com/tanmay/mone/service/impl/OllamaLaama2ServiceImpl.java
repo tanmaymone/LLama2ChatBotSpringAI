@@ -13,10 +13,13 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.ai.vectorstore.PineconeVectorStore;
+import org.springframework.ai.vectorstore.PineconeVectorStore.PineconeVectorStoreConfig;
 import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.SimpleVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
 import com.tanmay.mone.service.OllamaLaama2Service;
@@ -25,8 +28,17 @@ import com.tanmay.mone.service.OllamaLaama2Service;
 public class OllamaLaama2ServiceImpl implements OllamaLaama2Service {
 
 	private static final Map<String, ChatResponse> localCache = new ConcurrentHashMap<>();
+
 	private OllamaChatModel chatModel;
-	private SimpleVectorStore vectorStore;
+	private VectorStore vectorStore;
+
+	public OllamaLaama2ServiceImpl(OllamaChatModel chatModel, OllamaEmbeddingModel embeddingModel,
+			VectorStore vectorStore) throws IOException {
+		this.chatModel = chatModel;
+		this.vectorStore = new PineconeVectorStore(PineconeVectorStoreConfig.builder()
+				.withApiKey("pcsk_6UHNBN_Ma7piMZu4JEh3mEMuPuirjjBZrS5E2NYEMR234tPKJVsBWtmZEJU9oTjseWwfGk")
+				.withIndexName("ElasticSearch").build(), embeddingModel);
+	}
 
 	private static final List<String> STOP_WORDS = Arrays.asList("a", "an", "the", "is", "of", "to", "and", "in", "for",
 			"on", "with", "at", "by", "this", "that", "it", "which");
@@ -62,11 +74,6 @@ public class OllamaLaama2ServiceImpl implements OllamaLaama2Service {
 		// This regex removes anything that's not a letter or a number (including
 		// spaces)
 		return text.replaceAll("[^a-zA-Z0-9\\s]", "");
-	}
-
-	public OllamaLaama2ServiceImpl(OllamaChatModel chatModel, SimpleVectorStore vectorStore) throws IOException {
-		this.chatModel = chatModel;
-		this.vectorStore = vectorStore;
 	}
 
 	@Override

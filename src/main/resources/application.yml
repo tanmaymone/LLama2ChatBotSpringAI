@@ -1,4 +1,9 @@
+logging:
+  level:
+    root: DEBUG
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: Spring_AI_RAG_DEMO
   ai:
